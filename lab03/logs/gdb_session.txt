@@ -1,0 +1,92 @@
+The target architecture is set to "arm".
+Remote debugging using localhost:1234
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+0x00010254 in _start ()
+Breakpoint 1 at 0x1040e: file buggy_app.c, line 29.
+Breakpoint 2 at 0x1035e: file buggy_app.c, line 7.
+Breakpoint 3 at 0x103a8: file buggy_app.c, line 16.
+Breakpoint 4 at 0x103de: file buggy_app.c, line 24.
+Continuing.
+
+Breakpoint 1, main (argc=1, argv=0x7efffe94) at buggy_app.c:29
+29	int main(int argc, char *argv[]) {
+#0  main (argc=1, argv=0x7efffe94) at buggy_app.c:29
+arr = {306564, 2130705952, 1996484960, 92331600, 0}
+msg = 0x73734 <_dl_debug_mask> ""
+Continuing.
+
+Breakpoint 2, process_data (data=0x7efffd10, len=5) at buggy_app.c:7
+7	    int sum = 0;
+#0  process_data (data=0x7efffd10, len=5) at buggy_app.c:7
+#1  0x00010450 in main (argc=1, argv=0x7efffe94) at buggy_app.c:34
+data = 0x7efffd10
+len = 5
+❌️ A syntax error in expression, near `continue
+print i
+print len
+print data[5]
+print &data[5]
+x/6dw data
+info registers pc sp lr'.
+Breakpoint 5 at 0x10368: file buggy_app.c, line 9.
+Continuing.
+
+Breakpoint 5, process_data (data=0x7efffd10, len=5) at buggy_app.c:9
+9	        sum += data[i];                /* Out-of-bounds khi i==len */
+$1 = 5
+$2 = 5
+$3 = 348751360
+$4 = (int *) 0x7efffd24
+0x7efffd10:	10	20	30	40
+0x7efffd20:	50	348751360
+pc             0x10368             0x10368 <process_data+20>
+sp             0x7efffce8          0x7efffce8
+lr             0x10451             66641
+Hardware watchpoint 6: i
+Continuing.
+❌️ Warning:
+Could not insert hardware watchpoint 6.
+Could not insert hardware breakpoints:
+You may have requested too many hardware breakpoints/watchpoints.
+
+❌️ Command aborted.
+Watchpoint 7: i
+Continuing.
+
+Watchpoint 7: i
+
+Old value = 5
+New value = 6
+0x0001037e in process_data (data=0x7efffd10, len=5) at buggy_app.c:8
+8	    for (int i = 0; i <= len; i++) {   /* Bug: <= thay vi < */
+Breakpoint 8 at 0x103a8: file buggy_app.c, line 16.
+Continuing.
+
+Breakpoint 8, create_message (text=0x491ac "Hello Embedded Linux") at buggy_app.c:16
+16	    char *buf = malloc(strlen(text) + 1);
+17	    strcpy(buf, text);
+18	    free(buf);
+$5 = 0x75c38 "Hello Embedded Linux"
+0x75c38:	"Hello Embedded Linux"
+19	    return buf;   /* Bug: tra ve pointer da bi free */
+❌️ Undefined command: "".  Try "help".
+0x75c38:	"u"
+0x75c38:	0x00000075	0xc482df99	0x64646562	0x4c206465
+0x75c48:	0x78756e69	0x00000000
+Breakpoint 9 at 0x103de: file buggy_app.c, line 24.
+Continuing.
+
+Breakpoint 9, calculate (a=100000, b=100000) at buggy_app.c:24
+24	    int result = a * b;   /* Bug: a*b co the overflow int */
+a = 100000
+b = 100000
+25	    printf("calculate(%d, %d) = %d\n", a, b, result);
+$6 = 1410065408
+$7 = 10000000000
+$8 = 0x540be400
+Continuing.
+[Inferior 1 (process 72) exited normally]
