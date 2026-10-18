@@ -1,0 +1,63 @@
+/ # echo "=====DMESG_START====="
+=====DMESG_START=====
+/ # dmesg | grep -E 'asgn1|counter'
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+asgn1_driver: loading out-of-tree module taints kernel.
+asgn1: loaded, major=241, ioctl magic='q'
+asgn1: device opened (open_count=1)
+asgn1: ioctl GET_VERSION
+asgn1: device closed
+asgn1: device opened (open_count=2)
+asgn1: write 11 bytes, mode=ECHO (write_count=1)
+asgn1: device closed
+asgn1: device opened (open_count=3)
+asgn1: read 11 bytes (read_count=1)
+asgn1: device closed
+asgn1: device opened (open_count=4)
+asgn1: ioctl SET_MODE -> 0 (KERNEL)
+asgn1: device closed
+asgn1: device opened (open_count=5)
+asgn1: write 13 bytes, mode=KERNEL (write_count=2)
+asgn1: device closed
+asgn1: device opened (open_count=6)
+asgn1: read 22 bytes (read_count=2)
+asgn1: device closed
+asgn1: device opened (open_count=7)
+asgn1: device closed
+asgn1: device opened (open_count=8)
+asgn1: device closed
+asgn1: device opened (open_count=9)
+asgn1: ioctl SET_MODE -> 1 (ECHO)
+asgn1: device closed
+asgn1: device opened (open_count=10)
+asgn1: ioctl GET_STATS
+asgn1: device closed
+asgn1: device opened (open_count=11)
+asgn1: write 18 bytes, mode=ECHO (write_count=3)
+asgn1: device closed
+asgn1: device opened (open_count=12)
+asgn1: ioctl RESET_BUFFER - buffer and counters cleared
+asgn1: device closed
+asgn1: device opened (open_count=13)
+asgn1: device closed
+asgn1: device opened (open_count=14)
+asgn1: ioctl GET_STATS
+asgn1: device closed
+asgn1: module unloaded, all resources released
+counter: registered /dev/counter major=10 minor=125
+counter: read -> 0
+counter: read -> 1
+counter: read -> 2
+counter: set to 100
+counter: read -> 100
+counter: read -> 101
+counter: set to 0
+counter: read -> 0
+counter: invalid input rejected
+counter: invalid input rejected
+counter: module unloaded
+asgn1: loaded, major=241, ioctl magic='q'
+asgn1: device opened (open_count=1)
+asgn1: device closed
+asgn1: module unloaded, all resources released
+/ # echo "=====DMESG_END====="

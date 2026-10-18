@@ -1,0 +1,59 @@
+========= ASSIGNMENT-01 Task 2: misc counter test =========
+[1] Load module
+  [PASS] insmod
+counter_driver 16384 0 - Live 0x7f000000 (O)
+crw-rw-rw-    1 root     0          10, 125 Oct 10 15:39 [1;35m/dev/counter[m
+125 counter
+[2] /proc/counter_info - BEFORE write
+Counter Driver Statistics
+=========================
+Device            : /dev/counter (major=10, minor=125)
+Current value     : 0
+Total reads (inc) : 0
+Total writes (set): 0
+Total resets (=0) : 0
+[3] Auto-increment on read
+  reads: 0 1 2
+  [PASS] read returns 0,1,2
+[4] Write 100
+  read: 100
+  [PASS] set to 100
+  [PASS] next read = 101
+[5] /proc/counter_info - AFTER write
+Counter Driver Statistics
+=========================
+Device            : /dev/counter (major=10, minor=125)
+Current value     : 102
+Total reads (inc) : 5
+Total writes (set): 1
+Total resets (=0) : 0
+[6] Reset with 0
+  read: 0
+  [PASS] reset to 0
+[7] Invalid input
+  [PASS] negative rejected (EINVAL)
+  [PASS] non-number rejected (EINVAL)
+[8] /proc/counter_info - AFTER reset
+Counter Driver Statistics
+=========================
+Device            : /dev/counter (major=10, minor=125)
+Current value     : 1
+Total reads (inc) : 6
+Total writes (set): 2
+Total resets (=0) : 1
+[9] Unload module
+  [PASS] rmmod
+  [PASS] /proc entry removed
+counter: registered /dev/counter major=10 minor=125
+counter: read -> 0
+counter: read -> 1
+counter: read -> 2
+counter: set to 100
+counter: read -> 100
+counter: read -> 101
+counter: set to 0
+counter: read -> 0
+counter: invalid input rejected
+counter: invalid input rejected
+counter: module unloaded
+========== RESULT: 9 passed, 0 failed ==========

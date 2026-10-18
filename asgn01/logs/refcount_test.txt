@@ -1,0 +1,14 @@
+/ # insmod /lib/modules/5.15.0/asgn1_driver.ko
+/ # lsmod | grep asgn1          # c?t "Used by" = 0
+asgn1_driver 16384 0 - Live 0x7f000000 (O)
+/ # exec 3</dev/asgn1           # gi? /dev/asgn1 m? b?ng fd 3
+/ # lsmod | grep asgn1          # "Used by" = 1
+asgn1_driver 16384 2 - Live 0x7f000000 (O)
+/ # rmmod asgn1_driver          # ph?i báo l?i: in use
+rmmod: remove 'asgn1_driver': Resource temporarily unavailable
+/ # exec 3<&-                   # đóng fd 3
+/ # lsmod | grep asgn1          # "Used by" = 0
+asgn1_driver 16384 0 - Live 0x7f000000 (O)
+/ # rmmod asgn1_driver          # thành công
+/ # lsmod | grep asgn1
+/ # echo "=====DMESG_START====="

@@ -1,0 +1,74 @@
+=========== ASSIGNMENT-01 Task 1: ioctl test ===========
+[1] Load module
+  [PASS] insmod
+asgn1_driver 16384 0 - Live 0x7f000000 (O)
+crw-------    1 root     0         241,   0 Oct 10 15:39 [1;35m/dev/asgn1[m
+[2] ioctl encoding
+ioctl command encoding (dir: 0=none 1=write 2=read):
+  ASGN1_RESET_BUFFER   = 0x00007100  type='q' nr=0 size=0 dir=0
+  ASGN1_GET_STATS      = 0x80187101  type='q' nr=1 size=24 dir=2
+  ASGN1_SET_MODE       = 0x40047102  type='q' nr=2 size=4 dir=1
+  ASGN1_GET_VERSION    = 0x80407103  type='q' nr=3 size=64 dir=2
+[3] GET_VERSION
+GET_VERSION: asgn1_driver v1.0 - SE202007V
+  [PASS] GET_VERSION
+[4] Echo mode (default)
+  read: [Hello Echo]
+  [PASS] echo mode stores data as-is
+[5] Kernel mode
+SET_MODE: 0 OK
+  read: [[KERNEL] Hello Kernel]
+  [PASS] kernel mode adds prefix
+[6] Invalid mode / invalid command
+  [PASS] SET_MODE 5 rejected (EINVAL)
+Invalid ioctl correctly rejected (ENOTTY)
+  [PASS] unknown ioctl -> ENOTTY
+SET_MODE: 1 OK
+[7] GET_STATS
+GET_STATS:
+  open_count      : 10
+  write_count     : 2
+  read_count      : 2
+  buffer_len      : 22
+  last_write_size : 13
+  mode            : 1 (ECHO)
+  [PASS] GET_STATS
+[8] RESET_BUFFER
+RESET_BUFFER: OK
+  read after reset: []
+  [PASS] buffer empty after reset
+GET_STATS:
+  open_count      : 14
+  write_count     : 0
+  read_count      : 0
+  buffer_len      : 0
+  last_write_size : 0
+  mode            : 1 (ECHO)
+[9] Unload module
+  [PASS] rmmod
+asgn1: device opened (open_count=6)
+asgn1: read 22 bytes (read_count=2)
+asgn1: device closed
+asgn1: device opened (open_count=7)
+asgn1: device closed
+asgn1: device opened (open_count=8)
+asgn1: device closed
+asgn1: device opened (open_count=9)
+asgn1: ioctl SET_MODE -> 1 (ECHO)
+asgn1: device closed
+asgn1: device opened (open_count=10)
+asgn1: ioctl GET_STATS
+asgn1: device closed
+asgn1: device opened (open_count=11)
+asgn1: write 18 bytes, mode=ECHO (write_count=3)
+asgn1: device closed
+asgn1: device opened (open_count=12)
+asgn1: ioctl RESET_BUFFER - buffer and counters cleared
+asgn1: device closed
+asgn1: device opened (open_count=13)
+asgn1: device closed
+asgn1: device opened (open_count=14)
+asgn1: ioctl GET_STATS
+asgn1: device closed
+asgn1: module unloaded, all resources released
+========== RESULT: 9 passed, 0 failed ==========
