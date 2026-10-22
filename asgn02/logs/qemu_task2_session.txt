@@ -1,0 +1,335 @@
+Booting Linux on physical CPU 0x0
+Linux version 5.15.0 (quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA) (arm-linux-gnueabihf-gcc-12 (Ubuntu 12.5.0-9ubuntu1) 12.5.0, GNU ld (GNU Binutils for Ubuntu) 2.46) #2 SMP Wed Oct 21 08:30:36 +07 2026
+CPU: ARMv7 Processor [410fc090] revision 0 (ARMv7), cr=10c5387d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT nonaliasing instruction cache
+OF: fdt: Machine model: V2P-CA9
+Memory policy: Data cache writealloc
+Reserved memory: created DMA memory pool at 0x4c000000, size 8 MiB
+OF: reserved mem: initialized node vram@4c000000, compatible id shared-dma-pool
+cma: Reserved 16 MiB at 0x7f000000
+Zone ranges:
+  Normal   [mem 0x0000000060000000-0x000000007fffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000060000000-0x000000007fffffff]
+Initmem setup node 0 [mem 0x0000000060000000-0x000000007fffffff]
+percpu: Embedded 15 pages/cpu s30156 r8192 d23092 u61440
+Built 1 zonelists, mobility grouping on.  Total pages: 130048
+Kernel command line: console=ttyAMA0,115200 rdinit=/sbin/init
+printk: log_buf_len individual max cpu contribution: 4096 bytes
+printk: log_buf_len total cpu_extra contributions: 12288 bytes
+printk: log_buf_len min size: 16384 bytes
+printk: log_buf_len: 32768 bytes
+printk: early log buf free: 14968(91%)
+Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+Memory: 488896K/524288K available (8192K kernel code, 594K rwdata, 1768K rodata, 1024K init, 150K bss, 19008K reserved, 16384K cma-reserved)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+trace event string verifier disabled
+rcu: Hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+L2C: platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C: DT/platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C-310 enabling early BRESP for Cortex-A9
+L2C-310 full line of zeros enabled for Cortex-A9
+L2C-310 dynamic clock gating disabled, standby mode disabled
+L2C-310 cache controller enabled, 8 ways, 128 kB
+L2C-310: CACHE_ID 0x410000c8, AUX_CTRL 0x46420001
+random: get_random_bytes called from start_kernel+0x4fc/0x6b4 with crng_init=0
+sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
+Failed to initialize '/bus@40000000/motherboard-bus@40000000/iofpga@7,00000000/timer@12000': -22
+smp_twd: clock not found -2
+Console: colour dummy device 80x30
+Calibrating local timer... 95.61MHz.
+Calibrating delay loop... 1587.60 BogoMIPS (lpj=7938048)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+CPU: Testing write buffer coherency: ok
+CPU0: Spectre v2: using BPIALL workaround
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+Setting up static identity map for 0x60100000 - 0x60100060
+rcu: Hierarchical SRCU implementation.
+smp: Bringing up secondary CPUs ...
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+CPU1: Spectre v2: using BPIALL workaround
+CPU2: failed to boot: -38
+CPU3: failed to boot: -38
+smp: Brought up 1 node, 2 CPUs
+SMP: Total of 2 processors activated (3175.21 BogoMIPS).
+CPU: All CPU(s) started in SVC mode.
+devtmpfs: initialized
+VFP support v0.3: implementor 41 architecture 3 part 30 variant 9 rev 0
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+cpuidle: using governor ladder
+hw-breakpoint: debug architecture 0x4 unsupported.
+Serial: AMBA PL011 UART driver
+irq: type mismatch, failed to map hwirq-75 for interrupt-controller@1e001000!
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+Advanced Linux Sound Architecture Driver Initialized.
+clocksource: Switched to clocksource arm,sp804
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 6144 bytes, linear)
+TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+TCP bind hash table entries: 4096 (order: 3, 32768 bytes, linear)
+TCP: Hash tables configured (established 4096 bind 4096)
+UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+Unpacking initramfs...
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+workingset: timestamp_bits=30 max_order=17 bucket_order=0
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+9p: Installing v9fs 9p2000 file system support
+io scheduler mq-deadline registered
+io scheduler kyber registered
+sii902x 0-0060: supply iovcc not found, using dummy regulator
+sii902x 0-0060: supply cvcc12 not found, using dummy regulator
+Freeing initrd memory: 1984K
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x40000000-0x43ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x44000000-0x47ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+Concatenating MTD devices:
+(0): "40000000.flash"
+(1): "40000000.flash"
+into device "40000000.flash"
+physmap-flash 48000000.psram: physmap platform flash device: [mem 0x48000000-0x49ffffff]
+libphy: Fixed MDIO Bus: probed
+libphy: smsc911x-mdio: probed
+smsc911x 4e000000.ethernet eth0: MAC Address: 52:54:00:12:34:56
+isp1760 4f000000.usb: isp1760 bus width: 32, oc: digital
+isp1760 4f000000.usb: NXP ISP1760 USB Host Controller
+isp1760 4f000000.usb: new USB bus registered, assigned bus number 1
+isp1760 4f000000.usb: Scratch test failed. 0x00000000
+isp1760 4f000000.usb: can't setup: -19
+isp1760 4f000000.usb: USB bus 1 deregistered
+usbcore: registered new interface driver usb-storage
+ledtrig-cpu: registered to indicate activity on CPUs
+usbcore: registered new interface driver usbhid
+usbhid: USB HID core driver
+NET: Registered PF_PACKET protocol family
+9pnet: Installing 9P2000 support
+Registering SWP/SWPB emulation handler
+aaci-pl041 10004000.aaci: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+aaci-pl041 10004000.aaci: FIFO 512 entries
+mmci-pl18x 10005000.mmci: Got CD GPIO
+mmci-pl18x 10005000.mmci: Got WP GPIO
+mmci-pl18x 10005000.mmci: mmc0: PL181 manf 41 rev0 at 0x10005000 irq 33,34 (pio)
+10009000.uart: ttyAMA0 at MMIO 0x10009000 (irq = 37, base_baud = 0) is a PL011 rev1
+printk: console [ttyAMA0] enabled
+1000a000.uart: ttyAMA1 at MMIO 0x1000a000 (irq = 38, base_baud = 0) is a PL011 rev1
+1000b000.uart: ttyAMA2 at MMIO 0x1000b000 (irq = 39, base_baud = 0) is a PL011 rev1
+1000c000.uart: ttyAMA3 at MMIO 0x1000c000 (irq = 40, base_baud = 0) is a PL011 rev1
+rtc-pl031 10017000.rtc: registered as rtc0
+rtc-pl031 10017000.rtc: setting system clock to 2026-10-21T01:35:25 UTC (1792546525)
+amba 10020000.clcd: Fixing up cyclic dependency with 0-0039
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+sii902x 0-0039: supply iovcc not found, using dummy regulator
+sii902x 0-0039: supply cvcc12 not found, using dummy regulator
+i2c i2c-0: Added multiplexed i2c bus 2
+drm-clcd-pl111 1001f000.clcd: assigned reserved memory node vram@4c000000
+drm-clcd-pl111 1001f000.clcd: using device-specific reserved memory
+drm-clcd-pl111 1001f000.clcd: core tile graphics present
+drm-clcd-pl111 1001f000.clcd: this device will be deactivated
+drm-clcd-pl111 1001f000.clcd: Versatile Express init failed - -19
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+drm-clcd-pl111 10020000.clcd: found bridge on endpoint 0
+drm-clcd-pl111 10020000.clcd: Using non-panel bridge
+[drm] Initialized pl111 1.0.0 20170317 for 10020000.clcd on minor 0
+input: AT Raw Set 2 keyboard as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10006000.kmi/serio0/input/input0
+Console: switching to colour frame buffer device 128x48
+drm-clcd-pl111 10020000.clcd: [drm] fb0: pl111 frame buffer device
+ALSA device list:
+  #0: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+Freeing unused kernel image (initmem) memory: 1024K
+Run /sbin/init as init process
+input: ImExPS/2 Generic Explorer Mouse as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10007000.kmi/serio1/input/input2
+[ ASGN2 ] System ready.
+[ ASGN2 ] Load driver : insmod /lib/modules/sms_sensor_driver.ko
+[ ASGN2 ] Run app     : /usr/bin/sms_app -v
+
+Please press Enter to activate this console. random: fast init done
+
+/ # insmod /lib/modules/sms_sensor_driver.ko
+sms_sensor_driver: loading out-of-tree module taints kernel.
+sms_sensor: loaded, /dev/sms_sensor ready
+/ # cat /proc/sms_stats
+read_count: 0
+last_temperature: 0.0
+last_humidity: 0.0
+uptime_sec: 3
+interval_ms: 100
+/ # /usr/bin/sms_app -d 60 >/tmp/run.out 2>/tmp/run.err & PID=$!; ls /proc/$PID/
+task | wc -l; sleep 5; echo "== T=5s =="; grep -E "VmSize|VmRSS" /proc/$PID/stat
+us; sleep 25; echo "== T=30s =="; grep -E "VmSize|VmRSS" /proc/$PID/status; cat 
+/proc/sms_stats; sleep 25; echo "== T=55s =="; grep -E "VmSize|VmRSS" /proc/$PID
+/status; cat /proc/$PID/maps; wait $PID; echo "exit=$?"
+-/bin/sh: wc: not found
+sms_sensor: interval set to 500 ms
+== T=5s ==
+VmSize:	    3028 kB
+VmRSS:	    1744 kB
+== T=30s ==
+VmSize:	    3028 kB
+VmRSS:	    1744 kB
+read_count: 58
+last_temperature: 17.9
+last_humidity: 31.4
+uptime_sec: 70
+interval_ms: 500
+== T=55s ==
+VmSize:	    3028 kB
+VmRSS:	    1744 kB
+00010000-00083000 r-xp 00000000 00:02 60         /usr/bin/sms_app
+0009d000-000a0000 r--p 0007d000 00:02 60         /usr/bin/sms_app
+000a0000-000a2000 rw-p 00080000 00:02 60         /usr/bin/sms_app
+000a2000-000c6000 rw-p 00000000 00:00 0          [heap]
+76cbf000-76cc0000 ---p 00000000 00:00 0 
+76cc0000-76d21000 rw-p 00000000 00:00 0 
+76d21000-76e00000 ---p 00000000 00:00 0 
+76e35000-76e36000 ---p 00000000 00:00 0 
+76e36000-76e76000 rw-p 00000000 00:00 0 
+76e76000-76e77000 ---p 00000000 00:00 0 
+76e77000-76eb7000 rw-p 00000000 00:00 0 
+76eb7000-76eb8000 ---p 00000000 00:00 0 
+76eb8000-76f29000 rw-p 00000000 00:00 0 
+7ef32000-7ef53000 rw-p 00000000 00:00 0          [stack]
+7efcb000-7efcc000 r-xp 00000000 00:00 0          [sigpage]
+7efcc000-7efcd000 r--p 00000000 00:00 0          [vvar]
+7efcd000-7efce000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+exit=0
+[1]+  Done                       /usr/bin/sms_app -d 60 1>/tmp/run.out 2>/tmp/run.err
+/ # cat /tmp/run.out
+
+========== SMS summary ==========
+Uptime            : 60.2 s
+Samples read      : 116
+Samples processed : 116
+Buffer            : produced=116 consumed=116 overflow=0
+Alerts            : TEMP_HIGH=17 HUMID_HIGH=20 TEMP_SPIKE=82 (total 119, dropped 0)
+Read errors       : 0   Period overruns: 2
+Log messages lost : 0
+Log file          : /tmp/sms.log
+Jitter report     : /tmp/jitter_report.txt (117 samples)
+/ # cat /proc/sms_stats
+read_count: 116
+last_temperature: 23.6
+last_humidity: 36.8
+uptime_sec: 260
+interval_ms: 500
+/ # cat /tmp/jitter_report.txt
+=== SMS jitter report (2026-10-21 01:37:15) ===
+Requested policy : SCHED_FIFO (prio 50)
+Active policy    : SCHED_FIFO (prio 50)
+Period           : 500 ms
+Samples          : 117
+Min / Avg / Max  : 618 / 141934.7 / 522847 us
+P99              : 506015 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :      0 (  0.0%)
+  500-1000 us  :      3 (  2.6%)
+  >1 ms        :    114 ( 97.4%)
+
+/ # head -n 5 /tmp/sms.log
+2026-10-21 01:36:15.515 [INFO] SMS start: interval=500ms temp_thr=40.0 hum_thr=80.0 duration=60s dev=/dev/sms_sensor
+2026-10-21 01:36:15.528 [STATE] INIT -> RUNNING
+2026-10-21 01:36:15.532 [INFO] sensor thread scheduling: SCHED_FIFO prio=50
+2026-10-21 01:36:16.042 [SAMPLE] ts=53706 T=41.8 H=30.4 avgT=41.80 avgH=30.40
+2026-10-21 01:36:16.044 [ALERT] ts=53706 TYPE=TEMP_HIGH VALUE=41.8 THRESHOLD=40.0
+/ # tail -n 5 /tmp/sms.log
+2026-10-21 01:37:15.695 [INFO] duration of 60 s elapsed
+2026-10-21 01:37:15.696 [STATE] RUNNING -> SHUTDOWN
+2026-10-21 01:37:15.714 [SUMMARY] samples read=116 processed=116 overflow=0 read_errors=0
+2026-10-21 01:37:15.715 [SUMMARY] alerts TEMP_HIGH=17 HUMID_HIGH=20 TEMP_SPIKE=82 total=119
+2026-10-21 01:37:15.715 [SUMMARY] uptime=60.2s, exit=OK
+/ # sh -c 'while :; do :; done' & H1=$!
+/ # sh -c 'while :; do :; done' & H2=$!
+/ # sh -c 'while :; do :; done' & H2=$![J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J/usr/bin/sms_app -i 20 -d 25 -S fifo -j /tmp/jitter_cmp.txt -l /tmp/cmp_fifo
+.log >/dev/null 2>&1 & PID=$!; sleep 3; grep Threads /proc/$PID/status; wait $PI
+D; echo "fifo exit=$?"
+sms_sensor: interval set to 20 ms
+Threads:	5
+fifo exit=0
+[3]+  Done                       /usr/bin/sms_app -i 20 -d 25 -S fifo -j /tmp/jitter_cmp.txt -l /tmp/cmp_fifo.log 1>/dev/null 2>&1
+/ # /usr/bin/sms_app -i 20 -d 25 -S other -j /tmp/jitter_cmp.txt -l /tmp/cmp_oth
+er.log >/dev/null 2>&1; echo "other exit=$?"
+sms_sensor: interval set to 20 ms
+other exit=0
+/ # kill $H1 $H2
+/ # cat /tmp/jitter_cmp.txt
+=== SMS jitter report (2026-10-21 01:41:11) ===
+Requested policy : SCHED_FIFO (prio 50)
+Active policy    : SCHED_FIFO (prio 50)
+Period           : 20 ms
+Samples          : 577
+Min / Avg / Max  : 6292 / 31282.0 / 46355 us
+P99              : 46179 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :      0 (  0.0%)
+  500-1000 us  :      0 (  0.0%)
+  >1 ms        :    577 (100.0%)
+
+=== SMS jitter report (2026-10-21 01:42:02) ===
+Requested policy : SCHED_OTHER (prio 50)
+Active policy    : SCHED_OTHER (prio 0)
+Period           : 20 ms
+Samples          : 579
+Min / Avg / Max  : 7150 / 30793.0 / 46332 us
+P99              : 46161 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :      0 (  0.0%)
+  500-1000 us  :      0 (  0.0%)
+  >1 ms        :    579 (100.0%)
+
+[2]+  Terminated                 sh -c "while :; do :; done"
+[1]+  Terminated                 sh -c "while :; do :; done"
+/ # /usr/bin/sms_app -i 20 -d 10 -S fifo -j /tmp/jit_noload.txt -l /tmp/noload.l
+og >/dev/null 2>&1; cat /tmp/jit_noload.txt
+sms_sensor: interval set to 20 ms
+=== SMS jitter report (2026-10-21 01:44:11) ===
+Requested policy : SCHED_FIFO (prio 50)
+Active policy    : SCHED_FIFO (prio 50)
+Period           : 20 ms
+Samples          : 238
+Min / Avg / Max  : 3344 / 30353.3 / 46404 us
+P99              : 46281 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :      0 (  0.0%)
+  500-1000 us  :      0 (  0.0%)
+  >1 ms        :    238 (100.0%)
+
+/ # QEMU: Terminated
+

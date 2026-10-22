@@ -1,0 +1,60 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 7  of event 'cpu/cycles/P'
+# Event count (approx.): 35353535
+#
+# Overhead  Command      Shared Object      Symbol                         
+# ........  ...........  .................  ...............................
+#
+    14.29%  sms_app_x86  [kernel.kallsyms]  [k] 0xffffffffba2d9b35
+            |
+            ---0xffffffffba2d9b3c
+               0xffffffffba2aa53e
+               0xffffffffba2b0303
+               0xffffffffba2c2146
+               0xffffffffba2c24e6
+               0xffffffffba29c2fd
+               0xffffffffba2a0678
+               0xffffffffbb530885
+               0xffffffffbb530d97
+               0xffffffffbb538aee
+               0xffffffffba3773eb
+               0xffffffffba3844a1
+               0xffffffffba385dee
+               0xffffffffba148f75
+               0xffffffffbb520b65
+               0xffffffffb9e0012b
+               __syscall_cancel_arch (inlined)
+               __clock_nanosleep (inlined)
+               sensor_thread
+               start_thread
+               __clone3 (inlined)
+
+    14.29%  sms_app_x86  [kernel.kallsyms]  [k] 0xffffffffba2f044e
+            |
+            ---0xffffffffba2f0450
+               0xffffffffba2fe2da
+               0xffffffffbb530bbc
+               0xffffffffbb530d97
+               0xffffffffba39ee28
+               0xffffffffba39f62c
+               0xffffffffba39f72b
+               0xffffffffba39b112
+               0xffffffffba39b820
+               0xffffffffba14858e
+               0xffffffffbb520b65
+               0xffffffffb9e0012b
+               __syscall_cancel_arch (inlined)
+               __futex_abstimed_wait_common (inlined)
+               __futex_abstimed_wait_cancelable64 (inlined)
+               __pthread_cond_wait_common (inlined)
+               ___pthread_cond_timedwait64 (inlined)
+               cbuf_pop_timeout
+               logger_thread
+               start_thread
+               __clone3 (inlined)
+
+    14.29%  sms_app_x86  [kernel.kallsyms]  [k] 0xffffffffba398419

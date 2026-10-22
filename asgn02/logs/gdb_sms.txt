@@ -1,0 +1,127 @@
+Breakpoint 1 at 0x2fb9: file circular_buffer.c, line 92.
+Breakpoint 2 at 0x3093: file circular_buffer.c, line 109.
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x7ffff7eac6c0 (LWP 6470)]
+
+Thread 5 "sms_app_x86_dbg" hit Breakpoint 1, cbuf_push (cb=0x55555555f1f0, item=0x7ffff7eabdf0) at circular_buffer.c:92
+92	        cb->head = (cb->head + 1) % cb->capacity;
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 5 (Thread 0x7ffff7eac6c0 (LWP 6470))]
+$1 = 0
+$2 = 0
+$3 = 0
+$4 = 0
+  Id   Target Id                                          Frame 
+  1    Thread 0x7ffff7fa1740 (LWP 6464) "sms_app_x86_dbg" __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+  2    Thread 0x7ffff7f6f6c0 (LWP 6467) "sms_app_x86_dbg" __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+  3    Thread 0x7ffff7f2e6c0 (LWP 6468) "sms_app_x86_dbg" __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+  4    Thread 0x7ffff7eed6c0 (LWP 6469) "sms_app_x86_dbg" __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+* 5    Thread 0x7ffff7eac6c0 (LWP 6470) "sms_app_x86_dbg" cbuf_push (cb=0x55555555f1f0, item=0x7ffff7eabdf0) at circular_buffer.c:92
+
+Thread 5 (Thread 0x7ffff7eac6c0 (LWP 6470) "sms_app_x86_dbg"):
+#0  cbuf_push (cb=0x55555555f1f0, item=0x7ffff7eabdf0) at circular_buffer.c:92
+#1  0x00005555555588c8 in sensor_thread (arg=0x7fffffffdb10) at sensor_thread.c:188
+#2  0x00007ffff7ca3dfa in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#3  0x00007ffff7d375cc in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 4 (Thread 0x7ffff7eed6c0 (LWP 6469) "sms_app_x86_dbg"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca030c in __internal_syscall_cancel (a1=a1@entry=93824992277128, a2=<optimized out>, a3=a3@entry=1999559936, a4=a4@entry=0, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca06e7 in __futex_abstimed_wait_common64 (private=0, futex_word=0x55555555f288, expected=1999559936, op=393, abstime=0x0, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x55555555f288, expected=1999559936, clockid=0, abstime=0x0, private=0, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x55555555f288, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca30c7 in __pthread_cond_wait_common (cond=<optimized out>, mutex=0x55555555f240, clockid=0, abstime=0x0) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_wait (cond=<optimized out>, mutex=0x55555555f240) at ./nptl/pthread_cond_wait.c:453
+#7  0x000055555555707b in cbuf_pop (cb=0x55555555f1f0, item=0x7ffff7eece20) at circular_buffer.c:107
+#8  0x0000555555557f89 in processor_thread (arg=0x7fffffffdb10) at processor_thread.c:42
+#9  0x00007ffff7ca3dfa in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#10 0x00007ffff7d375cc in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 3 (Thread 0x7ffff7f2e6c0 (LWP 6468) "sms_app_x86_dbg"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca039c in __internal_syscall_cancel (a1=<optimized out>, a2=<optimized out>, a3=<optimized out>, a4=<optimized out>, a5=<optimized out>, a6=0, nr=243) at ./nptl/cancellation.c:49
+#2  __syscall_cancel (a1=<optimized out>, a2=<optimized out>, a3=<optimized out>, a4=<optimized out>, a5=<optimized out>, a6=a6@entry=0, nr=243) at ./nptl/cancellation.c:75
+#3  0x00007ffff7caff3c in ___mq_timedreceive_time64 (mqdes=<optimized out>, msg_ptr=<optimized out>, msg_len=<optimized out>, msg_prio=<optimized out>, abs_timeout=<optimized out>) at ../sysdeps/unix/sysv/linux/mq_timedreceive.c:35
+#4  0x0000555555556a50 in alert_thread (arg=0x7fffffffdb10) at alert_thread.c:22
+#5  0x00007ffff7ca3dfa in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#6  0x00007ffff7d375cc in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 2 (Thread 0x7ffff7f6f6c0 (LWP 6467) "sms_app_x86_dbg"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca030c in __internal_syscall_cancel (a1=a1@entry=93824992278344, a2=<optimized out>, a3=a3@entry=4157545315, a4=a4@entry=140737353542696, a5=a5@entry=0, a6=a6@entry=4294967295, nr=202) at ./nptl/cancellation.c:49
+#2  0x00007ffff7ca06e7 in __futex_abstimed_wait_common64 (private=1, futex_word=0x55555555f748, expected=4157545315, op=136, abstime=0x7ffff7f6ec28, cancel=true) at ./nptl/futex-internal.c:57
+#3  __futex_abstimed_wait_common (futex_word=0x55555555f748, expected=4157545315, clockid=1, abstime=0x7ffff7f6ec28, private=1, cancel=true) at ./nptl/futex-internal.c:87
+#4  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x55555555f748, expected=expected@entry=0, clockid=clockid@entry=1, abstime=abstime@entry=0x7ffff7f6ed80, private=private@entry=0) at ./nptl/futex-internal.c:139
+#5  0x00007ffff7ca3382 in __pthread_cond_wait_common (cond=0x55555555f728, mutex=0x55555555f700, clockid=<optimized out>, abstime=0x7ffff7f6ed80) at ./nptl/pthread_cond_wait.c:421
+#6  ___pthread_cond_timedwait64 (cond=0x55555555f728, mutex=0x55555555f700, abstime=0x7ffff7f6ed80) at ./nptl/pthread_cond_wait.c:478
+#7  0x00005555555571b7 in cbuf_pop_timeout (cb=0x55555555f6b0, item=0x7ffff7f6ede0, timeout_ms=1000) at circular_buffer.c:132
+#8  0x0000555555557a33 in logger_thread (arg=0x7fffffffdb10) at logger_thread.c:110
+#9  0x00007ffff7ca3dfa in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:454
+#10 0x00007ffff7d375cc in __GI___clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 1 (Thread 0x7ffff7fa1740 (LWP 6464) "sms_app_x86_dbg"):
+#0  __syscall_cancel_arch () at ../sysdeps/unix/sysv/linux/x86_64/syscall_cancel.S:56
+#1  0x00007ffff7ca039c in __internal_syscall_cancel (a1=<optimized out>, a2=0, a3=<optimized out>, a4=8, a5=0, a6=0, nr=128) at ./nptl/cancellation.c:49
+#2  __syscall_cancel (a1=<optimized out>, a2=a2@entry=0, a3=<optimized out>, a4=a4@entry=8, a5=a5@entry=0, a6=a6@entry=0, nr=128) at ./nptl/cancellation.c:75
+#3  0x00007ffff7c46875 in __GI___sigtimedwait (set=<optimized out>, info=0x0, timeout=<optimized out>) at ../sysdeps/unix/sysv/linux/sigtimedwait.c:31
+#4  0x0000555555559c2f in wait_for_end (ctx=0x7fffffffdb10) at sms_app.c:293
+#5  0x000055555555a1ee in main (argc=11, argv=0x7fffffffdd38) at sms_app.c:373
+[Switching to Thread 0x7ffff7eed6c0 (LWP 6469)]
+
+Thread 4 "sms_app_x86_dbg" hit Breakpoint 2, cbuf_pop (cb=0x55555555f1f0, item=0x7ffff7eece20) at circular_buffer.c:109
+109	    if (cb->size > 0)
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 4 (Thread 0x7ffff7eed6c0 (LWP 6469))]
+$5 = 1
+$6 = 0
+$7 = 1
+$8 = 1
+[Switching to Thread 0x7ffff7eac6c0 (LWP 6470)]
+
+Thread 5 "sms_app_x86_dbg" hit Breakpoint 1, cbuf_push (cb=0x55555555f1f0, item=0x7ffff7eabdf0) at circular_buffer.c:92
+92	        cb->head = (cb->head + 1) % cb->capacity;
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 5 (Thread 0x7ffff7eac6c0 (LWP 6470))]
+$9 = 1
+$10 = 1
+$11 = 0
+$12 = 1
+[Switching to Thread 0x7ffff7eed6c0 (LWP 6469)]
+
+Thread 4 "sms_app_x86_dbg" hit Breakpoint 2, cbuf_pop (cb=0x55555555f1f0, item=0x7ffff7eece20) at circular_buffer.c:109
+109	    if (cb->size > 0)
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 4 (Thread 0x7ffff7eed6c0 (LWP 6469))]
+$13 = 2
+$14 = 1
+$15 = 1
+$16 = 2
+
+##### scheduler-locking on: chi thread hien tai chay khi next #####
+110	        take_locked(cb, item);
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 4 (Thread 0x7ffff7eed6c0 (LWP 6469))]
+$17 = 2
+$18 = 1
+$19 = 1
+$20 = 2
+113	    pthread_mutex_unlock(&cb->lock);
+
+##### STOP: thread, head/tail/size cua shared_buffer #####
+[Current thread is 4 (Thread 0x7ffff7eed6c0 (LWP 6469))]
+$21 = 2
+$22 = 2
+$23 = 0
+$24 = 2
+[Inferior 1 (process 6464) exited normally]

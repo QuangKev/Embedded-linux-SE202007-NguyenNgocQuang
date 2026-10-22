@@ -1,0 +1,8 @@
+total 0
+lr-x------    1 root     0               64 Oct 21 02:43 [1;36m0[m -> [1;35m/dev/null[m
+l-wx------    1 root     0               64 Oct 21 02:43 [1;36m1[m -> [0;0m/tmp/sms_sample_run.txt[m
+l-wx------    1 root     0               64 Oct 21 02:43 [1;36m2[m -> [0;0m/tmp/sms_sample_run.txt[m
+l-wx------    1 root     0               64 Oct 21 02:43 [1;36m3[m -> [0;0m/tmp/sms.log[m
+lr-x------    1 root     0               64 Oct 21 02:43 [1;36m4[m -> [1;35m/dev/sms_sensor[m
+lr-x------    1 root     0               64 Oct 21 02:43 [1;36m5[m -> [0;0m/sms_alarm_queue[m
+l-wx------    1 root     0               64 Oct 21 02:43 [1;36m6[m -> [0;0m/sms_alarm_queue[m

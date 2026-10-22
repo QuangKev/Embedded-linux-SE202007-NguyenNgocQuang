@@ -1,0 +1,1 @@
+load: 4 busy-loop processes (sh -c 'while :; do :; done'), period 20 ms, 25 s per run

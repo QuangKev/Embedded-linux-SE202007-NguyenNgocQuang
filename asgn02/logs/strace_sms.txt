@@ -1,0 +1,43 @@
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- -------------------
+ 38.69    0.132396          52      2538       162 futex
+ 22.69    0.077668         517       150       150 rt_sigtimedwait
+ 18.08    0.061883         205       301         1 clock_nanosleep
+ 16.67    0.057057         184       310           mq_timedreceive
+  2.13    0.007274          21       338           write
+  0.98    0.003365          10       310           mq_timedsend
+  0.27    0.000909          10        83        56 mmap
+  0.14    0.000495         495         1           mlockall
+  0.10    0.000334          47         7           mprotect
+  0.05    0.000155          17         9           munmap
+  0.04    0.000142          35         4           clone3
+  0.04    0.000131           6        21           rt_sigprocmask
+  0.03    0.000087          17         5           openat
+  0.02    0.000075          25         3           brk
+  0.01    0.000029           5         5           set_robust_list
+  0.01    0.000028           5         5         5 madvise
+  0.01    0.000027          27         1           getpid
+  0.01    0.000027           5         5           rseq
+  0.01    0.000026           6         4           lseek
+  0.01    0.000021          21         1           tgkill
+  0.00    0.000017           2         7           fstat
+  0.00    0.000014           4         3           read
+  0.00    0.000009           1         7           close
+  0.00    0.000009           4         2           mq_open
+  0.00    0.000008           8         1           newfstatat
+  0.00    0.000007           7         1         1 rt_sigreturn
+  0.00    0.000006           6         1           getrandom
+  0.00    0.000005           2         2           rt_sigaction
+  0.00    0.000005           5         1           sched_getparam
+  0.00    0.000005           5         1         1 sched_setscheduler
+  0.00    0.000005           5         1           prlimit64
+  0.00    0.000004           4         1         1 ioctl
+  0.00    0.000004           2         2         1 mq_unlink
+  0.00    0.000003           3         1           sched_getscheduler
+  0.00    0.000000           0         2           pread64
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+  0.00    0.000000           0         1           set_tid_address
+------ ----------- ----------- --------- --------- -------------------
+100.00    0.342230          82      4138       379 total

@@ -1,0 +1,5 @@
+read_count: 0
+last_temperature: 0.0
+last_humidity: 0.0
+uptime_sec: 0
+interval_ms: 100

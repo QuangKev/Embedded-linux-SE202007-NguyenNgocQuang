@@ -1,0 +1,1 @@
+Linux version 5.15.0 (quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA) (arm-linux-gnueabihf-gcc-12 (Ubuntu 12.5.0-9ubuntu1) 12.5.0, GNU ld (GNU Binutils for Ubuntu) 2.46) #3 SMP PREEMPT Wed Oct 21 08:52:27 +07 2026

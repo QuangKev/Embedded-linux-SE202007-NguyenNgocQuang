@@ -1,0 +1,44 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cpu/cycles/P'
+# Event count (approx.): 646178535
+#
+# Overhead  Command      Shared Object         Symbol                                     
+# ........  ...........  ....................  ...........................................
+#
+     5.61%  sms_app_x86  libc.so.6             [.] __printf_buffer
+     4.02%  sms_app_x86  libc.so.6             [.] __vfscanf_internal
+     3.62%  sms_app_x86  libc.so.6             [.] __printf_fp_buffer_1.isra.0
+     1.73%  sms_app_x86  libc.so.6             [.] __memmove_evex_unaligned_erms
+     1.55%  sms_app_x86  libc.so.6             [.] __syscall_cancel_arch_end
+     1.25%  sms_app_x86  [kernel.kallsyms]     [k] 0xffffffffbb53bde8
+     1.23%  sms_app_x86  libc.so.6             [.] pthread_mutex_lock@@GLIBC_2.2.5
+     1.23%  sms_app_x86  libc.so.6             [.] __strftime_internal
+     1.18%  sms_app_x86  libc.so.6             [.] __strlen_evex
+     1.13%  sms_app_x86  libc.so.6             [.] __GI_____strtof_l_internal
+     1.08%  sms_app_x86  libc.so.6             [.] __strchrnul_evex
+     1.08%  sms_app_x86  sms_app_x86           [.] sensor_thread
+     0.98%  sms_app_x86  libc.so.6             [.] clock_gettime@@GLIBC_2.17
+     0.85%  sms_app_x86  libc.so.6             [.] __offtime
+     0.83%  sms_app_x86  libc.so.6             [.] __internal_syscall_cancel
+     0.81%  sms_app_x86  libc.so.6             [.] _itoa_word
+     0.74%  sms_app_x86  libc.so.6             [.] __printf_buffer_write
+     0.68%  sms_app_x86  [kernel.kallsyms]     [k] 0xffffffffbb53dca0
+     0.62%  sms_app_x86  libc.so.6             [.] pthread_cond_wait@@GLIBC_2.3.2
+     0.62%  sms_app_x86  libc.so.6             [.] __vfprintf_internal
+     0.60%  sms_app_x86  [kernel.kallsyms]     [k] 0xffffffffba398066
+     0.58%  sms_app_x86  [kernel.kallsyms]     [k] 0xffffffffbb520b65
+     0.57%  sms_app_x86  [kernel.kallsyms]     [k] 0xffffffffbb530785
+     0.56%  sms_app_x86  libc.so.6             [.] hack_digit
+     0.56%  sms_app_x86  libc.so.6             [.] pthread_cond_timedwait@@GLIBC_2.3.2
+     0.53%  sms_app_x86  libc.so.6             [.] __tzfile_compute
+     0.53%  sms_app_x86  libc.so.6             [.] __mpn_divrem
+     0.51%  sms_app_x86  libc.so.6             [.] pthread_cond_signal@@GLIBC_2.3.2
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

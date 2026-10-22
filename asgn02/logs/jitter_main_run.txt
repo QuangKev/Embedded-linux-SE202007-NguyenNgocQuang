@@ -1,0 +1,13 @@
+=== SMS jitter report (2026-10-21 02:43:09) ===
+Requested policy : SCHED_FIFO (prio 50)
+Active policy    : SCHED_FIFO (prio 50)
+Period           : 500 ms
+Samples          : 119
+Min / Avg / Max  : 166 / 452.1 / 629 us
+P99              : 592 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :     98 ( 82.4%)
+  500-1000 us  :     21 ( 17.6%)
+  >1 ms        :      0 (  0.0%)
+

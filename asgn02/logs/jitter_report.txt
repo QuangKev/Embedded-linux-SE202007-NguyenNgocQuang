@@ -1,0 +1,26 @@
+=== SMS jitter report (2026-10-21 02:43:34) ===
+Requested policy : SCHED_FIFO (prio 50)
+Active policy    : SCHED_FIFO (prio 50)
+Period           : 20 ms
+Samples          : 1251
+Min / Avg / Max  : 139 / 157.6 / 583 us
+P99              : 215 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :   1250 ( 99.9%)
+  500-1000 us  :      1 (  0.1%)
+  >1 ms        :      0 (  0.0%)
+
+=== SMS jitter report (2026-10-21 02:43:59) ===
+Requested policy : SCHED_OTHER (prio 50)
+Active policy    : SCHED_OTHER (prio 0)
+Period           : 20 ms
+Samples          : 1251
+Min / Avg / Max  : 195 / 243.0 / 523 us
+P99              : 413 us
+Histogram:
+  0-100 us     :      0 (  0.0%)
+  100-500 us   :   1249 ( 99.8%)
+  500-1000 us  :      2 (  0.2%)
+  >1 ms        :      0 (  0.0%)
+
