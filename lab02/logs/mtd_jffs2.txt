@@ -1,0 +1,45 @@
+Script started on 2026-10-22 13:24:47+07:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="230" LINES="55"]
+]666;vte.shell.postexec=0\]7;file://quang-VivoBook-ASUSLaptop-X513EAN-A515EA/home/quang/embedded-linux-SE202007/lab02/logs\]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA:~/embedded-linux-SE202007/lab02/logs\]666;vte.shell.precmd!\[?2004h]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ [7msudo modprobe nandsim first_id_byte=0x20 second_id_byte=0xaa third_id_byte=0x00 fourth_id_byte=0x15[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csudo modprobe nandsim first_id_byte=0x20 second_id_byte=0xaa third_id_byte=0x00 fourth_id_byte=0x15
+[?2004l]133;C\]666;vte.shell.preexec!\[sudo: authenticate] Password: ******      
+]666;vte.shell.postexec=0\]7;file://quang-VivoBook-ASUSLaptop-X513EAN-A515EA/home/quang/embedded-linux-SE202007/lab02/logs\]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA:~/embedded-linux-SE202007/lab02/logs\]666;vte.shell.precmd!\[?2004h]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ [7mcat /proc/mtd[27mcat /proc/mtd
+[?2004l]133;C\]666;vte.shell.preexec!\dev:    size   erasesize  name
+mtd0: 01000000 00001000 "BIOS"
+mtd1: 10000000 00020000 "NAND simulator partition 0"
+]666;vte.shell.postexec=0\]7;file://quang-VivoBook-ASUSLaptop-X513EAN-A515EA/home/quang/embedded-linux-SE202007/lab02/logs\]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA:~/embedded-linux-SE202007/lab02/logs\]666;vte.shell.precmd!\[?2004h]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ [7msudo flash_erase /dev/mtd1 0 0[27m
+[7msudo modprobe mtdblock[27m
+[7msudo mkdir -p /mnt/jffs2[27m
+[7msudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2[27m
+[7mdf -h /mnt/jffs2[27m[A[A[A[A]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ sudo flash_erase /dev/mtd1 0 0
+sudo modprobe mtdblock
+sudo mkdir -p /mnt/jffs2
+sudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2
+df -h /mnt/jffs2
+[?2004l]133;C\]666;vte.shell.preexec!\Erasing 262144 Kibyte @ 0 --  0 % complete Erasing 262144 Kibyte @ 0 -- 100 % complete 
+]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\Filesystem      Size  Used Avail Use% Mounted on
+/dev/mtdblock1  256M  5.7M  251M   3% /mnt/jffs2
+]666;vte.shell.postexec=0\]7;file://quang-VivoBook-ASUSLaptop-X513EAN-A515EA/home/quang/embedded-linux-SE202007/lab02/logs\]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA:~/embedded-linux-SE202007/lab02/logs\]666;vte.shell.precmd!\[?2004h]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ [7mecho "LAB-02 JFFS2 persistence test - SE202007" | sudo tee /mnt/jffs2/test.txt[27m
+[7msync[27m
+[7msudo umount /mnt/jffs2[27m
+[7msudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2[27m
+[7mcat /mnt/jffs2/test.txt[27m
+[7mls -l /mnt/jffs2[27m
+
+[7msudo umount /mnt/jffs2[27m
+[7msudo rmmod mtdblock jffs2 nandsim[27m
+[7mexit[27m[A[A[A[A[A[A[A[A[A]0;quang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA: ~/embedded-linux-SE202007/lab02/logs[01;32mquang@quang-VivoBook-ASUSLaptop-X513EAN-A515EA[00m:[01;34m~/embedded-linux-SE202007/lab02/logs[00m$ echo "LAB-02 JFFS2 persistence test - SE202007" | sudo tee /mnt/jffs2/test.txt
+sync
+sudo umount /mnt/jffs2
+sudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2
+cat /mnt/jffs2/test.txt
+ls -l /mnt/jffs2
+
+sudo umount /mnt/jffs2
+sudo rmmod mtdblock jffs2 nandsim
+exit
+[?2004l]133;C\]666;vte.shell.preexec!\LAB-02 JFFS2 persistence test - SE202007
+]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\LAB-02 JFFS2 persistence test - SE202007
+]133;C\]666;vte.shell.preexec!\total 0
+-rw-r--r-- 1 root root 41 Oct 22 13:25 test.txt
+]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\]133;C\]666;vte.shell.preexec!\exit
+
+Script done on 2026-10-22 13:25:51+07:00 [COMMAND_EXIT_CODE="0"]
