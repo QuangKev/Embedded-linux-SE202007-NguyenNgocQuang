@@ -9,6 +9,7 @@
 #include <linux/slab.h>
 #include <linux/mutex.h>
 #include <linux/atomic.h>
+#include <linux/string.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Embedded Linux Lab");
@@ -151,8 +152,15 @@ static ssize_t lab2_write(struct file *file, const char __user *buf,
         mutex_unlock(&lab2_mutex);
         return -EFAULT;
     }
-    buffer_len = len;
-    device_buffer[buffer_len] = '\0';
+    /* Accept both printf 'clear' and echo clear (trailing newline). */
+    if ((len == 5 && !memcmp(device_buffer, "clear", 5)) ||
+        (len == 6 && !memcmp(device_buffer, "clear\n", 6))) {
+        memset(device_buffer, 0, sizeof(device_buffer));
+        buffer_len = 0;
+    } else {
+        buffer_len = len;
+        device_buffer[buffer_len] = '\0';
+    }
     atomic64_inc(&write_count);
     mutex_unlock(&lab2_mutex);
     pr_info("lab2_driver: received %zu bytes: [%s]\n", len, device_buffer);
