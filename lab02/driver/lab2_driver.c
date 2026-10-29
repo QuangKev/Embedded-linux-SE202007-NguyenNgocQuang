@@ -66,6 +66,18 @@ static const struct proc_ops lab2_proc_fops = {
     .proc_release = single_release,
 };
 /* ===== SYSFS Implementation ===== */
+static ssize_t status_show(struct device *dev,
+                           struct device_attribute *attr, char *buf)
+{
+    ssize_t ret;
+
+    mutex_lock(&lab2_mutex);
+    ret = sysfs_emit(buf, "%s\n", buffer_len == 0 ? "EMPTY" : "DATA");
+    mutex_unlock(&lab2_mutex);
+
+    return ret;
+}
+
 static ssize_t buffer_size_show(struct device *dev,
                                struct device_attribute *attr, char *buf)
 {
@@ -97,12 +109,14 @@ static ssize_t read_count_show(struct device *dev,
 }
 
 static DEVICE_ATTR_RO(read_count);
+static DEVICE_ATTR_RO(status);
 static DEVICE_ATTR_RO(buffer_size);
 static DEVICE_ATTR_RO(buffer_len);
 static DEVICE_ATTR_RO(open_count);
 static DEVICE_ATTR_RO(last_data);
 
 static struct attribute *lab2_attrs[] = {
+    &dev_attr_status.attr,
     &dev_attr_buffer_size.attr,
     &dev_attr_read_count.attr,
     &dev_attr_buffer_len.attr,
