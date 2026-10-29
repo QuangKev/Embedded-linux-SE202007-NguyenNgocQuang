@@ -15,7 +15,8 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Embedded Linux Lab");
 MODULE_DESCRIPTION("LAB-02: Simple Character Device Driver");
-MODULE_VERSION("1.0");
+#define DRIVER_VERSION "1.0"
+MODULE_VERSION(DRIVER_VERSION);
 
 #define DEVICE_NAME     "lab2"
 #define CLASS_NAME      "lab2_class"
@@ -89,6 +90,12 @@ static const struct proc_ops lab2_proc_fops = {
     .proc_release = single_release,
 };
 /* ===== SYSFS Implementation ===== */
+static ssize_t version_show(struct device *dev,
+                            struct device_attribute *attr, char *buf)
+{
+    return sysfs_emit(buf, "%s\n", DRIVER_VERSION);
+}
+
 static ssize_t status_show(struct device *dev,
                            struct device_attribute *attr, char *buf)
 {
@@ -132,6 +139,7 @@ static ssize_t read_count_show(struct device *dev,
 }
 
 static DEVICE_ATTR_RO(read_count);
+static DEVICE_ATTR_RO(version);
 static DEVICE_ATTR_RO(status);
 static DEVICE_ATTR_RO(buffer_size);
 static DEVICE_ATTR_RO(buffer_len);
@@ -139,6 +147,7 @@ static DEVICE_ATTR_RO(open_count);
 static DEVICE_ATTR_RO(last_data);
 
 static struct attribute *lab2_attrs[] = {
+    &dev_attr_version.attr,
     &dev_attr_status.attr,
     &dev_attr_buffer_size.attr,
     &dev_attr_read_count.attr,
