@@ -19,6 +19,7 @@ MODULE_VERSION("1.0");
 #define DEVICE_NAME     "lab2"
 #define CLASS_NAME      "lab2_class"
 #define BUFFER_SIZE     1024
+#define MAX_WRITE_SIZE  128
 #define DRIVER_MAJOR    240
 /* 240-254: reserved for local/experimental use */
 
@@ -143,9 +144,9 @@ static ssize_t lab2_read(struct file *file, char __user *buf,
 
 static ssize_t lab2_write(struct file *file, const char __user *buf,
                           size_t len, loff_t *offset) {
-    if (len > BUFFER_SIZE - 1) {
+    if (len > MAX_WRITE_SIZE) {
         pr_warn("lab2_driver: write too large, truncating\n");
-        len = BUFFER_SIZE - 1;
+        len = MAX_WRITE_SIZE;
     }
     mutex_lock(&lab2_mutex);
     if (copy_from_user(device_buffer, buf, len)) {
