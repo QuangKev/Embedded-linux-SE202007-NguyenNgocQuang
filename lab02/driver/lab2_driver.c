@@ -10,6 +10,7 @@
 #include <linux/mutex.h>
 #include <linux/atomic.h>
 #include <linux/string.h>
+#include <linux/timekeeping.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Embedded Linux Lab");
@@ -33,6 +34,8 @@ static atomic64_t read_count = ATOMIC64_INIT(0);
 static atomic64_t total_bytes_read = ATOMIC64_INIT(0);
 static atomic64_t write_count = ATOMIC64_INIT(0);
 static atomic64_t total_bytes_written = ATOMIC64_INIT(0);
+static struct timespec64 last_write_time;
+static bool has_last_write_time;
 static struct class  *lab2_class = NULL;
 static struct device *lab2_device = NULL;
 
@@ -42,6 +45,14 @@ static struct proc_dir_entry *proc_entry;
 
 static int lab2_proc_show(struct seq_file *m, void *v)
 {
+    struct timespec64 last_write;
+    bool has_last_write;
+
+    mutex_lock(&lab2_mutex);
+    last_write = last_write_time;
+    has_last_write = has_last_write_time;
+    mutex_unlock(&lab2_mutex);
+
     seq_printf(m, "LAB-02 Driver Statistics\n");
     seq_printf(m, "========================\n");
     seq_printf(m, "Driver name    : %s\n", DEVICE_NAME);
@@ -55,6 +66,12 @@ static int lab2_proc_show(struct seq_file *m, void *v)
                (long long)atomic64_read(&total_bytes_read));
     seq_printf(m, "Total bytes written: %lld\n",
                (long long)atomic64_read(&total_bytes_written));
+    if (has_last_write)
+        seq_printf(m, "Last write time: %lld.%09lu seconds since Unix epoch (UTC)\n",
+                   (long long)last_write.tv_sec,
+                   (unsigned long)last_write.tv_nsec);
+    else
+        seq_puts(m, "Last write time: never\n");
     if (buffer_len > 0)
         seq_printf(m, "Last data      : [%s]\n", device_buffer);
     return 0;
@@ -193,6 +210,8 @@ static ssize_t lab2_write(struct file *file, const char __user *buf,
     }
     atomic64_inc(&write_count);
     atomic64_add(len, &total_bytes_written);
+    ktime_get_real_ts64(&last_write_time);
+    has_last_write_time = true;
     mutex_unlock(&lab2_mutex);
     pr_info("lab2_driver: received %zu bytes: [%s]\n", len, device_buffer);
     return len;
