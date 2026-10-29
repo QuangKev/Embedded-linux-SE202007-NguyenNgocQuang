@@ -28,6 +28,7 @@ static char     device_buffer[BUFFER_SIZE];
 static int      buffer_len = 0;
 static int      open_count = 0;
 static atomic64_t read_count = ATOMIC64_INIT(0);
+static atomic64_t write_count = ATOMIC64_INIT(0);
 static struct class  *lab2_class = NULL;
 static struct device *lab2_device = NULL;
 
@@ -44,6 +45,8 @@ static int lab2_proc_show(struct seq_file *m, void *v)
     seq_printf(m, "Buffer size    : %d bytes\n", BUFFER_SIZE);
     seq_printf(m, "Data length    : %d bytes\n", buffer_len);
     seq_printf(m, "Open count     : %d\n", open_count);
+    seq_printf(m, "Write count    : %lld\n",
+               (long long)atomic64_read(&write_count));
     if (buffer_len > 0)
         seq_printf(m, "Last data      : [%s]\n", device_buffer);
     return 0;
@@ -150,6 +153,7 @@ static ssize_t lab2_write(struct file *file, const char __user *buf,
     }
     buffer_len = len;
     device_buffer[buffer_len] = '\0';
+    atomic64_inc(&write_count);
     mutex_unlock(&lab2_mutex);
     pr_info("lab2_driver: received %zu bytes: [%s]\n", len, device_buffer);
     return len;
