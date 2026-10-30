@@ -198,15 +198,21 @@ out:
     return result;
 }
 
+static bool lab2_is_clear(const char *data, size_t len) {
+    return (len == 5 && !memcmp(data, "clear", 5)) ||
+           (len == 6 && !memcmp(data, "clear\n", 6)); // So dung ca do dai va noi dung, khong nhan clearX
+}
+
 static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len, loff_t *offset) {
     char *temp;
+    size_t requested = len; // Do dai goc, truoc khi cat xuong gioi han ghi
     (void)file; (void)offset;
     if (!len) return 0;
     if (len > MAX_WRITE_SIZE) len = MAX_WRITE_SIZE; // Giu gioi han 128 byte moi lan ghi cua bai 4
     temp = memdup_user(buf, len); // Copy vao dem rieng: EFAULT khong lam hong du lieu cu
     if (IS_ERR(temp)) return PTR_ERR(temp);
     mutex_lock(&lab2_mutex);
-    if ((len == 5 && !memcmp(temp, "clear", 5)) || (len == 6 && !memcmp(temp, "clear\n", 6))) {
+    if (lab2_is_clear(temp, requested)) {
         memset(device_buffer, 0, sizeof(device_buffer)); buffer_len = 0;
     } else {
         if (len > BUFFER_SIZE - 1 - buffer_len) {
