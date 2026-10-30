@@ -30,6 +30,7 @@ MODULE_VERSION(DRIVER_VERSION);
 static int      major_number = DRIVER_MAJOR;
 static char     device_buffer[BUFFER_SIZE];
 static int      buffer_len = 0;
+static unsigned int max_size = MAX_WRITE_SIZE; // Gioi han moi write, mac dinh 128; bao ve boi lab2_mutex
 static int      open_count = 0;
 static atomic64_t read_count = ATOMIC64_INIT(0);
 static atomic64_t total_bytes_read = ATOMIC64_INIT(0);
@@ -144,6 +145,18 @@ static ssize_t reset_stats_store(struct device *dev, struct device_attribute *at
 }
 
 static DEVICE_ATTR_RW(reset_stats);
+static ssize_t max_size_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex); n = sysfs_emit(buf, "%u\n", max_size); mutex_unlock(&lab2_mutex);
+    return n;
+}
+static ssize_t max_size_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t count) {
+    unsigned int value; (void)dev; (void)attr;
+    if (kstrtouint(buf, 10, &value) || value < 1 || value > MAX_WRITE_SIZE) return -EINVAL;
+    mutex_lock(&lab2_mutex); max_size = value; mutex_unlock(&lab2_mutex); // Khong cat du lieu dang luu
+    return count;
+}
+static DEVICE_ATTR_RW(max_size);
 static DEVICE_ATTR_RO(read_count);
 static DEVICE_ATTR_RO(version);
 static DEVICE_ATTR_RO(status);
@@ -153,6 +166,7 @@ static DEVICE_ATTR_RO(open_count);
 static DEVICE_ATTR_RO(last_data);
 
 static struct attribute *lab2_attrs[] = {
+    &dev_attr_max_size.attr,
     &dev_attr_reset_stats.attr,
     &dev_attr_version.attr,
     &dev_attr_status.attr,
@@ -215,6 +229,7 @@ static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len,
     if (lab2_is_clear(temp, requested)) {
         memset(device_buffer, 0, sizeof(device_buffer)); buffer_len = 0;
     } else {
+        if (len > max_size) len = max_size; // Chi gioi han du lieu; lenh clear khong bi cat
         if (len > BUFFER_SIZE - 1 - buffer_len) {
             mutex_unlock(&lab2_mutex); kfree(temp); return -ENOSPC; // Khong du cho thi giu nguyen buffer
         }
