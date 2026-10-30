@@ -119,9 +119,10 @@ static ssize_t buffer_len_show(struct device *dev,
     return sprintf(buf, "%d\n", buffer_len);
 }
 
-static ssize_t open_count_show(struct device *dev,
-                               struct device_attribute *attr, char *buf) {
-    return sprintf(buf, "%d\n", open_count);
+static ssize_t open_count_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex); n = sysfs_emit(buf, "%d\n", open_count); mutex_unlock(&lab2_mutex);
+    return n;
 }
 
 static ssize_t last_data_show(struct device *dev,
@@ -180,10 +181,13 @@ static struct attribute_group lab2_attr_group = {
     .attrs = lab2_attrs,
 };
 static int lab2_open(struct inode *inode, struct file *file) {
+    int count;
+    (void)inode; (void)file;
     mutex_lock(&lab2_mutex);
-    open_count++;
+    if (open_count == INT_MAX) { mutex_unlock(&lab2_mutex); return -EOVERFLOW; }
+    count = ++open_count; // Chi dem lan open thanh cong; khong tang neu tra loi
     mutex_unlock(&lab2_mutex);
-    pr_info("lab2_driver: device opened (count=%d)\n", open_count);
+    pr_info("lab2_driver: device opened (count=%d)\n", count); // Log ban sao, khong doc bien chung sau unlock
     return 0;
 }
 static int lab2_release(struct inode *inode, struct file *file) {
