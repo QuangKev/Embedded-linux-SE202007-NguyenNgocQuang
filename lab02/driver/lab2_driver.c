@@ -198,32 +198,27 @@ out:
     return result;
 }
 
-static ssize_t lab2_write(struct file *file, const char __user *buf,
-                          size_t len, loff_t *offset) {
-    if (len > MAX_WRITE_SIZE) {
-        pr_warn("lab2_driver: write too large, truncating\n");
-        len = MAX_WRITE_SIZE;
-    }
+static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len, loff_t *offset) {
+    char *temp;
+    (void)file; (void)offset;
+    if (!len) return 0;
+    if (len > MAX_WRITE_SIZE) len = MAX_WRITE_SIZE; // Giu gioi han 128 byte moi lan ghi cua bai 4
+    temp = memdup_user(buf, len); // Copy vao dem rieng: EFAULT khong lam hong du lieu cu
+    if (IS_ERR(temp)) return PTR_ERR(temp);
     mutex_lock(&lab2_mutex);
-    if (copy_from_user(device_buffer, buf, len)) {
-        mutex_unlock(&lab2_mutex);
-        return -EFAULT;
-    }
-    /* Accept both printf 'clear' and echo clear (trailing newline). */
-    if ((len == 5 && !memcmp(device_buffer, "clear", 5)) ||
-        (len == 6 && !memcmp(device_buffer, "clear\n", 6))) {
-        memset(device_buffer, 0, sizeof(device_buffer));
-        buffer_len = 0;
+    if ((len == 5 && !memcmp(temp, "clear", 5)) || (len == 6 && !memcmp(temp, "clear\n", 6))) {
+        memset(device_buffer, 0, sizeof(device_buffer)); buffer_len = 0;
     } else {
-        buffer_len = len;
-        device_buffer[buffer_len] = '\0';
+        if (len > BUFFER_SIZE - 1 - buffer_len) {
+            mutex_unlock(&lab2_mutex); kfree(temp); return -ENOSPC; // Khong du cho thi giu nguyen buffer
+        }
+        memcpy(device_buffer + buffer_len, temp, len); // Noi du lieu moi vao cuoi du lieu cu
+        buffer_len += len; device_buffer[buffer_len] = '\0';
     }
-    atomic64_inc(&write_count);
-    atomic64_add(len, &total_bytes_written);
-    ktime_get_real_ts64(&last_write_time);
-    has_last_write_time = true;
+    atomic64_inc(&write_count); atomic64_add(len, &total_bytes_written);
+    ktime_get_real_ts64(&last_write_time); has_last_write_time = true;
     mutex_unlock(&lab2_mutex);
-    pr_info("lab2_driver: received %zu bytes: [%s]\n", len, device_buffer);
+    kfree(temp);
     return len;
 }
 
