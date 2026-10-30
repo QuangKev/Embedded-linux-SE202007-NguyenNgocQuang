@@ -53,6 +53,9 @@ static int lab2_proc_show(struct seq_file *m, void *v) {
     seq_printf(m, "Driver name    : %s\nMajor number   : %d\n", DEVICE_NAME, major_number);
     seq_printf(m, "Buffer size    : %d bytes\nData length    : %d bytes\n", BUFFER_SIZE, buffer_len);
     seq_printf(m, "Open count     : %d\n", open_count);
+    seq_printf(m, "Read count     : %lld\n", (long long)atomic64_read(&read_count));
+    seq_printf(m, "Status         : %s\n", buffer_len ? "DATA" : "EMPTY");
+    seq_printf(m, "Max write size : %u\nLast write size: %u\n", max_size, last_write_size);
     seq_printf(m, "Write count    : %lld\n", (long long)atomic64_read(&write_count));
     seq_printf(m, "Total bytes read: %lld\n", (long long)atomic64_read(&total_bytes_read));
     seq_printf(m, "Total bytes written: %lld\n", (long long)atomic64_read(&total_bytes_written));
