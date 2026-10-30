@@ -138,6 +138,24 @@ static ssize_t read_count_show(struct device *dev,
                       (long long)atomic64_read(&read_count));
 }
 
+
+static ssize_t reset_stats_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    (void)dev; (void)attr;
+    return sysfs_emit(buf, "write reset to reset statistics\n"); // Huong dan, khong sua thong ke khi doc
+}
+static ssize_t reset_stats_store(struct device *dev, struct device_attribute *attr,
+                                 const char *buf, size_t count) {
+    (void)dev; (void)attr;
+    if (!sysfs_streq(buf, "reset")) return -EINVAL; // Chap nhan reset hoac reset\n
+    mutex_lock(&lab2_mutex); // Reset cac bo dem trong cung mot vung khoa
+    open_count = 0;
+    atomic64_set(&read_count, 0); atomic64_set(&write_count, 0);
+    atomic64_set(&total_bytes_read, 0); atomic64_set(&total_bytes_written, 0);
+    mutex_unlock(&lab2_mutex);
+    return count; // Thanh cong: tra so byte cua lenh sysfs
+}
+
+static DEVICE_ATTR_RW(reset_stats);
 static DEVICE_ATTR_RO(read_count);
 static DEVICE_ATTR_RO(version);
 static DEVICE_ATTR_RO(status);
@@ -147,6 +165,7 @@ static DEVICE_ATTR_RO(open_count);
 static DEVICE_ATTR_RO(last_data);
 
 static struct attribute *lab2_attrs[] = {
+    &dev_attr_reset_stats.attr,
     &dev_attr_version.attr,
     &dev_attr_status.attr,
     &dev_attr_buffer_size.attr,
