@@ -1,0 +1,4 @@
+make: Entering directory '/home/trien/Documents/Codex/2026-10-27/drive-google-com-drive-folders-1knseijz3kew0hcy6ocebgrpxjwety1cf/work/repo_bai11_20/lab02/driver'
+make -C /home/trien/Documents/Codex/2026-10-27/drive-google-com-drive-folders-1knseijz3kew0hcy6ocebgrpxjwety1cf/work/lab2_build/linux-5.15 M=/home/trien/Documents/Codex/2026-10-27/drive-google-com-drive-folders-1knseijz3kew0hcy6ocebgrpxjwety1cf/work/repo_bai11_20/lab02/driver ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules
+make: Leaving directory '/home/trien/Documents/Codex/2026-10-27/drive-google-com-drive-folders-1knseijz3kew0hcy6ocebgrpxjwety1cf/work/repo_bai11_20/lab02/driver'
+Built: /home/trien/Documents/Codex/2026-10-27/drive-google-com-drive-folders-1knseijz3kew0hcy6ocebgrpxjwety1cf/work/repo_bai11_20/lab02/output/initramfs_lab2.cpio.gz bytes: 1680828

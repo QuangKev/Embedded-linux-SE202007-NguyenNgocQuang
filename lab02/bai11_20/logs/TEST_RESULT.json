@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-30",
+  "platform": "QEMU vexpress-a9 Cortex-A9 ARMv7 SMP2 512MiB",
+  "kernel": "5.15.0",
+  "cycles": 3,
+  "checks_per_cycle": 590,
+  "total_checks": 1770,
+  "exit_marker": "BAI11_20_TEST_RESULT=0",
+  "arm_build": "PASS -Werror",
+  "x86_build": "PASS -Werror (build only, not loaded)",
+  "host_insmod": false,
+  "kernel_diagnostics_detected": false
+}
