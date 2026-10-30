@@ -43,6 +43,8 @@ static struct class  *lab2_class = NULL;
 static struct device *lab2_device = NULL;
 
 static DEFINE_MUTEX(lab2_mutex);
+static u64 data_generation; // Doi sau write/clear; mutex bao ve ca tren ARM 32-bit
+struct lab2_reader { u64 generation; }; // Moi open co rieng, truy cap khi giu lab2_mutex
 /* ===== PROCFS Implementation ===== */
 static struct proc_dir_entry *proc_entry;
 
@@ -193,33 +195,44 @@ static struct attribute_group lab2_attr_group = {
     .attrs = lab2_attrs,
 };
 static int lab2_open(struct inode *inode, struct file *file) {
-    int count;
-    (void)inode; (void)file;
+    struct lab2_reader *reader;
+    int count, ret;
+    reader = kzalloc(sizeof(*reader), GFP_KERNEL); // Bo nho rieng cho moi fd, tra lai trong release
+    if (!reader) return -ENOMEM; // Open that bai khong tang open_count
+    ret = nonseekable_open(inode, file); // Bai nay doc tuan tu, khong them seek ngoai de
+    if (ret) { kfree(reader); return ret; }
     mutex_lock(&lab2_mutex);
-    if (open_count == INT_MAX) { mutex_unlock(&lab2_mutex); return -EOVERFLOW; }
-    count = ++open_count; // Chi dem lan open thanh cong; khong tang neu tra loi
+    if (open_count == INT_MAX) { mutex_unlock(&lab2_mutex); kfree(reader); return -EOVERFLOW; }
+    reader->generation = data_generation; file->private_data = reader;
+    count = ++open_count; // Tang sau khi moi buoc co the loi da thanh cong
     mutex_unlock(&lab2_mutex);
-    pr_info("lab2_driver: device opened (count=%d)\n", count); // Log ban sao, khong doc bien chung sau unlock
+    pr_info("lab2_driver: device opened (count=%d)\n", count);
     return 0;
 }
 static int lab2_release(struct inode *inode, struct file *file) {
+    (void)inode;
+    kfree(file->private_data); // Kernel goi release khi khong con nguoi dung file nay
     pr_info("lab2_driver: device closed\n");
     return 0;
 }
 static ssize_t lab2_read(struct file *file, char __user *buf, size_t len, loff_t *offset) {
+    struct lab2_reader *reader = file->private_data;
+    loff_t pos;
     ssize_t result;
-    (void)file;
-    mutex_lock(&lab2_mutex); // Khoa ca kiem tra do dai, copy du lieu va cap nhat thong ke
-    atomic64_inc(&read_count); // Giu quy uoc bai 1: dem ca EOF va loi
+    mutex_lock(&lab2_mutex); // Bao ve buffer, thong ke va generation trong cung khoa
+    atomic64_inc(&read_count); // Dem ca EOF va loi theo quy uoc bai 1
     if (*offset < 0) { result = -EINVAL; goto out; }
-    if (*offset >= buffer_len || len == 0) { result = 0; goto out; }
-    if (len > buffer_len - *offset) len = buffer_len - *offset;
-    if (copy_to_user(buf, device_buffer + *offset, len)) { result = -EFAULT; goto out; }
-    *offset += len; // Chi tang vi tri sau khi copy thanh cong
-    atomic64_add(len, &total_bytes_read);
+    if (!len) { result = 0; goto out; }
+    pos = reader->generation == data_generation ? *offset : 0; // Write moi: fd duoc doc tu dau
+    if (pos >= buffer_len) { result = 0; goto completed; } // EOF, cat dung binh thuong
+    if (len > buffer_len - pos) len = buffer_len - pos;
+    if (copy_to_user(buf, device_buffer + pos, len)) { result = -EFAULT; goto out; }
+    pos += len; atomic64_add(len, &total_bytes_read); // Chi dem byte tra thanh cong
     result = len;
+completed:
+    *offset = pos; reader->generation = data_generation; // Khong doi offset neu copy loi
 out:
-    mutex_unlock(&lab2_mutex); // Tat ca nhanh deu nha khoa
+    mutex_unlock(&lab2_mutex);
     return result;
 }
 
@@ -247,6 +260,7 @@ static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len,
         memcpy(device_buffer + buffer_len, temp, len); // Noi du lieu moi vao cuoi du lieu cu
         buffer_len += len; device_buffer[buffer_len] = '\0';
     }
+    data_generation++; // Danh dau noi dung moi de cac fd doc lai tu dau
     last_write_size = len; // Khong cap nhat neu zero-write, copy loi hay ENOSPC
     atomic64_inc(&write_count); atomic64_add(len, &total_bytes_written);
     ktime_get_real_ts64(&last_write_time); has_last_write_time = true;
