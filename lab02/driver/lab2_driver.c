@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/fs.h>
@@ -11,6 +12,9 @@
 #include <linux/atomic.h>
 #include <linux/string.h>
 #include <linux/timekeeping.h>
+#include <linux/version.h>
+#include <linux/compat.h>
+#include "lab2_ioctl.h"
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Embedded Linux Lab");
@@ -269,7 +273,27 @@ static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len,
     return len;
 }
 
+static long lab2_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
+    __u32 length;
+    (void)file;
+    switch (cmd) {
+    case LAB2_GET_BUFFER_LEN:
+        mutex_lock(&lab2_mutex); length = buffer_len; mutex_unlock(&lab2_mutex); // Chup gia tri duoi khoa
+        return copy_to_user((void __user *)arg, &length, sizeof(length)) ? -EFAULT : 0;
+    case LAB2_CLEAR_BUFFER:
+        mutex_lock(&lab2_mutex);
+        memset(device_buffer, 0, sizeof(device_buffer)); buffer_len = 0; data_generation++;
+        mutex_unlock(&lab2_mutex); // Ioctl khong phai write nen khong tang write_count/last_write_size
+        return 0;
+    default: return -ENOTTY; // Lenh ioctl khong duoc ho tro
+    }
+}
+
 static struct file_operations lab2_fops = {
+    .unlocked_ioctl = lab2_ioctl, // Noi ioctl cua userspace voi ham xu ly tren
+#ifdef CONFIG_COMPAT
+    .compat_ioctl = compat_ptr_ioctl, // Du lieu __u32 co cung kich thuoc o 32/64-bit
+#endif
     .owner = THIS_MODULE,
     .open = lab2_open,
     .release = lab2_release,
@@ -289,7 +313,11 @@ static int __init lab2_init(void) {
     }
 
     /* Tạo device class và device node tự động trong /sys */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 4, 0)
+    lab2_class = class_create(CLASS_NAME); // Kernel moi bo doi so THIS_MODULE
+#else
     lab2_class = class_create(THIS_MODULE, CLASS_NAME);
+#endif
     if (IS_ERR(lab2_class)) {
         unregister_chrdev(major_number, DEVICE_NAME);
         return PTR_ERR(lab2_class);
@@ -306,13 +334,18 @@ static int __init lab2_init(void) {
 
 /* Đăng ký sysfs attribute group */
 ret = sysfs_create_group(&lab2_device->kobj, &lab2_attr_group);
-if (ret)
-    pr_warn("lab2_driver: sysfs_create_group failed\n");
+if (ret) {
+    device_destroy(lab2_class, MKDEV(major_number, 0)); class_destroy(lab2_class);
+    unregister_chrdev(major_number, DEVICE_NAME); return ret;
+}
 
     pr_info("lab2_driver: loaded, major=%d\n", major_number);
 proc_entry = proc_create("lab2_info", 0444, NULL, &lab2_proc_fops);
-if (!proc_entry)
-    pr_warn("lab2_driver: failed to create /proc/lab2_info\n");
+if (!proc_entry) {
+    sysfs_remove_group(&lab2_device->kobj, &lab2_attr_group);
+    device_destroy(lab2_class, MKDEV(major_number, 0)); class_destroy(lab2_class);
+    unregister_chrdev(major_number, DEVICE_NAME); return -ENOMEM;
+}
 else
     pr_info("lab2_driver: /proc/lab2_info created\n");
     return 0;
