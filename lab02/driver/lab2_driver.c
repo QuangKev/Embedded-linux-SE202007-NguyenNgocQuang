@@ -30,6 +30,7 @@ MODULE_VERSION(DRIVER_VERSION);
 static int      major_number = DRIVER_MAJOR;
 static char     device_buffer[BUFFER_SIZE];
 static int      buffer_len = 0;
+static unsigned int last_write_size; // Byte cua write thanh cong gan nhat, duoi lab2_mutex
 static unsigned int max_size = MAX_WRITE_SIZE; // Gioi han moi write, mac dinh 128; bao ve boi lab2_mutex
 static int      open_count = 0;
 static atomic64_t read_count = ATOMIC64_INIT(0);
@@ -157,6 +158,12 @@ static ssize_t max_size_store(struct device *dev, struct device_attribute *attr,
     return count;
 }
 static DEVICE_ATTR_RW(max_size);
+static ssize_t last_write_size_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex); n = sysfs_emit(buf, "%u\n", last_write_size); mutex_unlock(&lab2_mutex);
+    return n;
+}
+static DEVICE_ATTR_RO(last_write_size);
 static DEVICE_ATTR_RO(read_count);
 static DEVICE_ATTR_RO(version);
 static DEVICE_ATTR_RO(status);
@@ -166,6 +173,7 @@ static DEVICE_ATTR_RO(open_count);
 static DEVICE_ATTR_RO(last_data);
 
 static struct attribute *lab2_attrs[] = {
+    &dev_attr_last_write_size.attr,
     &dev_attr_max_size.attr,
     &dev_attr_reset_stats.attr,
     &dev_attr_version.attr,
@@ -236,6 +244,7 @@ static ssize_t lab2_write(struct file *file, const char __user *buf, size_t len,
         memcpy(device_buffer + buffer_len, temp, len); // Noi du lieu moi vao cuoi du lieu cu
         buffer_len += len; device_buffer[buffer_len] = '\0';
     }
+    last_write_size = len; // Khong cap nhat neu zero-write, copy loi hay ENOSPC
     atomic64_inc(&write_count); atomic64_add(len, &total_bytes_written);
     ktime_get_real_ts64(&last_write_time); has_last_write_time = true;
     mutex_unlock(&lab2_mutex);
