@@ -1,44 +1,21 @@
 #!/bin/sh
-mount -t proc none /proc
-mount -t sysfs none /sys
+grep -q " /proc " /proc/mounts 2>/dev/null || mount -t proc none /proc
+grep -q " /sys " /proc/mounts || mount -t sysfs none /sys
 mount -t tmpfs none /tmp
-echo 'Boot completed! Welcome to Embedded Linux Lab 1'
-hostname embedded-lab
-#!/bin/sh
-echo '[ LAB-02 ] Starting system initialization...'
-
-# Mount essential pseudo filesystems
-mount -t proc none /proc
-mount -t sysfs none /sys
-mount -t tmpfs none /tmp
-mount -t devtmpfs none /dev 2>/dev/null || true
-
-# Populate /dev nếu devtmpfs không available
-[ -c /dev/console ] || mknod /dev/console c 5 1
-[ -c /dev/null    ] || mknod /dev/null c 1 3
-[ -c /dev/zero    ] || mknod /dev/zero c 1 5
-
-# Set hostname
+mount -t devtmpfs none /dev
 hostname embedded-lab2
-echo embedded-lab2 > /proc/sys/kernel/hostname
-
-# ═══ AUTO-LOAD KERNEL MODULE ═══
-echo '[ LAB-02 ] Loading lab2_driver module...'
-if [ -f /lib/modules/5.15.0/lab2_driver.ko ]; then
-    insmod /lib/modules/5.15.0/lab2_driver.ko
-    if [ $? -eq 0 ]; then
-        echo '[ LAB-02 ] lab2_driver loaded OK'
-        mknod /dev/lab2 c 240 0
-        chmod 666 /dev/lab2
-        echo '[ LAB-02 ] /dev/lab2 created (major=240, minor=0)'
-    else
-        echo '[ LAB-02 ] ERROR: insmod lab2_driver failed!'
-    fi
-else
-    echo '[ LAB-02 ] WARNING: lab2_driver.ko not found'
+if grep -q bai11_20_test=1 /proc/cmdline; then
+    /usr/bin/test_lab2.sh
+    result=$?
+    echo "BAI11_20_TEST_RESULT=$result"
+    sync
+    reboot -f
 fi
-
-echo '[ LAB-02 ] System initialization complete!'
-echo '  -> Run test_driver.sh  to test character device'
-echo '  -> Run test_procfs.sh  to test proc/sysfs interfaces'
-echo '  -> cat /proc/lab2_info to view driver stats'
+if insmod /lib/modules/$(uname -r)/lab2_driver.ko; then
+    [ -c /dev/lab2 ] || mknod /dev/lab2 c 240 0
+    chmod 666 /dev/lab2
+    echo 'LAB02 ready: /dev/lab2, /proc/lab2_info, /sys/class/lab2_class/lab2'
+    echo 'Bai 11-20: /usr/bin/test_lab2.sh (resets data and statistics)'
+else
+    echo 'ERROR: could not load lab2_driver'
+fi
