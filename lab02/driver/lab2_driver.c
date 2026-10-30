@@ -44,37 +44,22 @@ static DEFINE_MUTEX(lab2_mutex);
 /* ===== PROCFS Implementation ===== */
 static struct proc_dir_entry *proc_entry;
 
-static int lab2_proc_show(struct seq_file *m, void *v)
-{
-    struct timespec64 last_write;
-    bool has_last_write;
-
-    mutex_lock(&lab2_mutex);
-    last_write = last_write_time;
-    has_last_write = has_last_write_time;
-    mutex_unlock(&lab2_mutex);
-
-    seq_printf(m, "LAB-02 Driver Statistics\n");
-    seq_printf(m, "========================\n");
-    seq_printf(m, "Driver name    : %s\n", DEVICE_NAME);
-    seq_printf(m, "Major number   : %d\n", major_number);
-    seq_printf(m, "Buffer size    : %d bytes\n", BUFFER_SIZE);
-    seq_printf(m, "Data length    : %d bytes\n", buffer_len);
+static int lab2_proc_show(struct seq_file *m, void *v) {
+    (void)v;
+    mutex_lock(&lab2_mutex); // Mot anh chup nhat quan, tranh doc buffer khi write dang sua
+    seq_puts(m, "LAB-02 Driver Statistics\n========================\n");
+    seq_printf(m, "Driver name    : %s\nMajor number   : %d\n", DEVICE_NAME, major_number);
+    seq_printf(m, "Buffer size    : %d bytes\nData length    : %d bytes\n", BUFFER_SIZE, buffer_len);
     seq_printf(m, "Open count     : %d\n", open_count);
-    seq_printf(m, "Write count    : %lld\n",
-               (long long)atomic64_read(&write_count));
-    seq_printf(m, "Total bytes read: %lld\n",
-               (long long)atomic64_read(&total_bytes_read));
-    seq_printf(m, "Total bytes written: %lld\n",
-               (long long)atomic64_read(&total_bytes_written));
-    if (has_last_write)
+    seq_printf(m, "Write count    : %lld\n", (long long)atomic64_read(&write_count));
+    seq_printf(m, "Total bytes read: %lld\n", (long long)atomic64_read(&total_bytes_read));
+    seq_printf(m, "Total bytes written: %lld\n", (long long)atomic64_read(&total_bytes_written));
+    if (has_last_write_time)
         seq_printf(m, "Last write time: %lld.%09lu seconds since Unix epoch (UTC)\n",
-                   (long long)last_write.tv_sec,
-                   (unsigned long)last_write.tv_nsec);
-    else
-        seq_puts(m, "Last write time: never\n");
-    if (buffer_len > 0)
-        seq_printf(m, "Last data      : [%s]\n", device_buffer);
+                   (long long)last_write_time.tv_sec, (unsigned long)last_write_time.tv_nsec);
+    else seq_puts(m, "Last write time: never\n");
+    if (buffer_len > 0) seq_printf(m, "Last data      : [%s]\n", device_buffer);
+    mutex_unlock(&lab2_mutex);
     return 0;
 }
 
@@ -114,9 +99,10 @@ static ssize_t buffer_size_show(struct device *dev,
     return sysfs_emit(buf, "%d\n", BUFFER_SIZE);
 }
 
-static ssize_t buffer_len_show(struct device *dev,
-                               struct device_attribute *attr, char *buf) {
-    return sprintf(buf, "%d\n", buffer_len);
+static ssize_t buffer_len_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex); n = sysfs_emit(buf, "%d\n", buffer_len); mutex_unlock(&lab2_mutex);
+    return n;
 }
 
 static ssize_t open_count_show(struct device *dev, struct device_attribute *attr, char *buf) {
@@ -125,18 +111,19 @@ static ssize_t open_count_show(struct device *dev, struct device_attribute *attr
     return n;
 }
 
-static ssize_t last_data_show(struct device *dev,
-                              struct device_attribute *attr, char *buf) {
-    if (buffer_len > 0)
-        return sprintf(buf, "%s\n", device_buffer);
-    return sprintf(buf, "(empty)\n");
+static ssize_t last_data_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex);
+    n = sysfs_emit(buf, "%s\n", buffer_len > 0 ? device_buffer : "(empty)");
+    mutex_unlock(&lab2_mutex);
+    return n;
 }
 
-static ssize_t read_count_show(struct device *dev,
-                              struct device_attribute *attr, char *buf)
-{
-    return sysfs_emit(buf, "%lld\n",
-                      (long long)atomic64_read(&read_count));
+static ssize_t read_count_show(struct device *dev, struct device_attribute *attr, char *buf) {
+    ssize_t n; (void)dev; (void)attr;
+    mutex_lock(&lab2_mutex); n = sysfs_emit(buf, "%lld\n", (long long)atomic64_read(&read_count));
+    mutex_unlock(&lab2_mutex);
+    return n;
 }
 
 
@@ -194,30 +181,21 @@ static int lab2_release(struct inode *inode, struct file *file) {
     pr_info("lab2_driver: device closed\n");
     return 0;
 }
-static ssize_t lab2_read(struct file *file, char __user *buf,
-                         size_t len, loff_t *offset) {
-    int bytes_read = 0;
-
-    /* Count every read call, including EOF and failed reads. */
-    atomic64_inc(&read_count);
-
-    if (*offset >= buffer_len)
-        return 0;  /* EOF */
-
-    if (len > buffer_len - *offset)
-        len = buffer_len - *offset;
-
-    if (copy_to_user(buf, device_buffer + *offset, len)) {
-        pr_err("lab2_driver: copy_to_user failed\n");
-        return -EFAULT;
-    }
-
-    *offset += len;
-    bytes_read = len;
-    atomic64_add(bytes_read, &total_bytes_read);
-
-    pr_info("lab2_driver: sent %d bytes to user\n", bytes_read);
-    return bytes_read;
+static ssize_t lab2_read(struct file *file, char __user *buf, size_t len, loff_t *offset) {
+    ssize_t result;
+    (void)file;
+    mutex_lock(&lab2_mutex); // Khoa ca kiem tra do dai, copy du lieu va cap nhat thong ke
+    atomic64_inc(&read_count); // Giu quy uoc bai 1: dem ca EOF va loi
+    if (*offset < 0) { result = -EINVAL; goto out; }
+    if (*offset >= buffer_len || len == 0) { result = 0; goto out; }
+    if (len > buffer_len - *offset) len = buffer_len - *offset;
+    if (copy_to_user(buf, device_buffer + *offset, len)) { result = -EFAULT; goto out; }
+    *offset += len; // Chi tang vi tri sau khi copy thanh cong
+    atomic64_add(len, &total_bytes_read);
+    result = len;
+out:
+    mutex_unlock(&lab2_mutex); // Tat ca nhanh deu nha khoa
+    return result;
 }
 
 static ssize_t lab2_write(struct file *file, const char __user *buf,
