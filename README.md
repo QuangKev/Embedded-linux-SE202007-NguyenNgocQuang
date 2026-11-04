@@ -4,9 +4,9 @@ Repository nộp bài thực hành (LAB) và bài tập cá nhân (ASSIGNMENT) m
 
 | | |
 |---|---|
-| **Sinh viên** | Nguyễn Ngọc Quang |
-| **MSSV** | SE202007 |
-| **GitHub** | QuangKev |
+| **Sinh viên** | Nguyễn Ngọc Quang | |**MSSV**| |SE202007|
+                | Trần Gia Khánh | |**MSSV**| |SE200963|
+                | Tăng Ngọc Triển | |**MSSV**| |SE200521|
 
 ---
 
